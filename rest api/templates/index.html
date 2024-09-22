@@ -80,7 +80,6 @@
 
     let selectedFilters = [];
 
-    // Add selected filter with cancel button
     multiSelect.addEventListener('change', () => {
         const selectedValue = multiSelect.value;
         if (selectedValue && !selectedFilters.includes(selectedValue)) {
@@ -89,7 +88,6 @@
         }
     });
 
-    // Render selected filters below the dropdown with cancel button
     function renderSelectedOptions() {
         selectedOptionsContainer.innerHTML = '';
         selectedFilters.forEach(filter => {
@@ -99,7 +97,6 @@
             selectedOptionsContainer.appendChild(optionDiv);
         });
 
-        // Add event listener to remove filter
         const removeButtons = document.querySelectorAll('.selected-option span');
         removeButtons.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -109,16 +106,13 @@
             });
         });
     }
-
-    // Handle form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         errorMessage.textContent = '';
-        responseContent.innerHTML = ''; // Clear previous responses
+        responseContent.innerHTML = ''; 
 
         let jsonData;
         try {
-            // Validate the JSON input
             jsonData = JSON.parse(jsonInput.value);
             if (!jsonData.data || !Array.isArray(jsonData.data)) {
                 throw new Error('JSON must contain a "data" key with an array of characters.');
@@ -128,14 +122,12 @@
             return;
         }
 
-        // Prepare the payload for API
         const payload = {
             data: jsonData.data,
             filters: selectedFilters
         };
 
         try {
-            // Send the request to the API
             const response = await fetch('http://127.0.0.1:5000/process', {
                 method: 'POST',
                 headers: {
@@ -147,7 +139,6 @@
             const result = await response.json();
 
             if (response.ok) {
-                // Display the result based on selected filters
                 if (selectedFilters.includes("numbers") && result.numbers) {
                     const numbersParagraph = document.createElement('p');
                     numbersParagraph.textContent = 'Numbers: ' + result.numbers;
@@ -166,7 +157,6 @@
                     responseContent.appendChild(alphabetsParagraph);
                 }
 
-                // If no filters are selected, show appropriate messages
                 if (selectedFilters.length === 0) {
                     responseContent.innerHTML = 'No filters selected.';
                 }
@@ -178,7 +168,6 @@
         }
     });
 
-    // Clear response content when page loads
     responseContent.innerHTML = '';
 });
 
