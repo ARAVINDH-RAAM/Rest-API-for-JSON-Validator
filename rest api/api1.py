@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for, render_template
 from flask_cors import CORS
 import logging
 import re
@@ -7,7 +7,10 @@ app = Flask(__name__)
 CORS(app)  
 
 logging.basicConfig(level=logging.INFO)
-
+@app.route('/')
+def welcome():
+    return render_template(index.html)
+    
 @app.route('/process', methods=['POST'])
 def process_json():
     try:
